@@ -3,6 +3,7 @@ from django.views import View
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 
 from .models import *
 from .forms import *
@@ -21,6 +22,17 @@ class RegisterTaskView(View):
         #messages.error(request, 'Este campo é obrigatório.')
         return render(request, 'taskManager/registerTask.html', {'form': form})
 
+class ListTaskView(View):    
+    @staticmethod
+    @login_required(redirect_field_name='next', login_url="/login/")
+    def get(request):           
+        dao = taskDao()
+        tasks = dao.ListTask(request.user)
+        context = {
+            'tasks': tasks 
+        }
+        return render(request, 'taskManager/listTask.html', context)
+
 class GenericView(View):
     def index(request):
         return render(request, 'taskManager/index.html')
@@ -32,8 +44,8 @@ class GenericView(View):
             user = authenticate(request, username=username, password=password)
 
             if user is not None:
-                login(request, user)                    
-                return render(request, 'taskManager/registerTask.html')
+                login(request, user)  
+                return redirect('taskManager:listTasks')
             else:  
                 context = {
                     'mensagem': messages.error(request, 'Credenciais inválidas. Por favor, tente novamente.'),

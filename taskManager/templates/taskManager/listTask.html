@@ -1,0 +1,19 @@
+{% extends 'taskManager/base.html' %}
+{% load static %}
+
+{% block conteudo %}
+<div class="container mt-5">
+    <h2 class="mb-4">Suas Tarefas</h2>
+    <ul class="list-group">
+        {% if tasks %}
+            {% for task in tasks %}
+                <a href="#"><li class="list-group-item d-inline-block w-50">{{ task.title }}</li></a>            
+            {% endfor %}
+        {% else %}        
+            <p>Não há tarefas cadastradas</p>
+        {% endif %}
+    </ul>    
+    <br/>
+    <button type="submit" class="btn btn-success">Cadastrar Nova Tarefa</button>
+</div>
+{% endblock %}

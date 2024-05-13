@@ -11,6 +11,9 @@ class taskDao:
             self.save(form.cleaned_data, user)
             return task
         
+    def ListTask(self, member):      
+        return Task.objects.filter(user=member)
+            
     def save(self, cleaned_data, u):
         title = cleaned_data['title']
         description = cleaned_data['description']
