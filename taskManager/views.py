@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 
 from django.contrib import messages
+from django.contrib.auth import authenticate, login
 
 from .models import *
 from .forms import *
@@ -21,5 +22,21 @@ class RegisterTaskView(View):
         return render(request, 'taskManager/registerTask.html', {'form': form})
 
 class GenericView(View):
-    def index(self, request):
+    def index(request):
+        return render(request, 'taskManager/index.html')
+    
+    def login(request):  
+        if request.method == 'POST':
+            username = request.POST.get('username')
+            password = request.POST.get('password')      
+            user = authenticate(request, username=username, password=password)
+
+            if user is not None:
+                login(request, user)                    
+                return render(request, 'taskManager/registerTask.html')
+            else:  
+                context = {
+                    'mensagem': messages.error(request, 'Credenciais inválidas. Por favor, tente novamente.'),
+                }
+                return render(request, 'taskManager/index.html', context)        
         return render(request, 'taskManager/index.html')

@@ -5,5 +5,7 @@ app_name = 'taskManager'
 
 urlpatterns = [  
     path('registerTask/', views.RegisterTaskView.post, name='post'),
-    path('', views.GenericView.index, name='index'),  
+    path('', views.GenericView.index, name='index'), 
+    path('login/', views.GenericView.login, name='login'),
+     
 ]
