@@ -1,8 +1,9 @@
-from django.test import TestCase, RequestFactory
+from django.test import TestCase, Client, RequestFactory
 from django.contrib.auth.models import User
-from .models import Task
+
 from .views import RegisterTaskView
 from .forms import TaskForm
+from .models import Task
 
 class RegisterTaskViewTest(TestCase):
     def setUp(self):
@@ -38,3 +39,20 @@ class RegisterTaskViewTest(TestCase):
         self.assertEqual(response.status_code, 200) # Verifica a render do form com erros
         # self.assertContains(response, 'Este campo é obrigatório.')         
         self.assertTrue(TaskForm(data=request.POST).is_bound) # Verifica se o formulário tem erros
+
+class ListTaskViewTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user('teste_nome', 'teste@email.com', 'senha123')
+        
+    def test_get_list_tasks_view(self):
+        client = Client()  # cliente de teste  
+        client.force_login(self.user)  # forçar o login
+
+        task1 = Task.objects.create(title='Tarefa 1', description='Descrição da Tarefa 1', user=self.user)
+        task2 = Task.objects.create(title='Tarefa 2', description='Descrição da Tarefa 2', user=self.user)
+        
+        response = client.get('/listTask/')
+       
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'taskManager/listTask.html')  
+        self.assertQuerysetEqual(response.context['tasks'], [task1, task2], ordered=False)  # verifica se o contexto contém as tarefas corretas
