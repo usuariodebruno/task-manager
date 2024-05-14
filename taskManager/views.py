@@ -18,11 +18,12 @@ class RegisterTaskView(View):
             if task:                
                 messages.success(request, 'Tarefa: "'+ task.title +'" registrada com sucesso!')
                 return redirect('taskManager:listTasks')
+        messages.error(request, 'Este campo é obrigatório.')
+        return RegisterTaskView.get(request)
     
     @login_required(redirect_field_name='next', login_url="/login/")
     def get(request):    
-        form = TaskForm()
-        #messages.error(request, 'Este campo é obrigatório.')
+        form = TaskForm()        
         return render(request, 'taskManager/registerTask.html', {'form': form})
 
 class ListTaskView(View):    
