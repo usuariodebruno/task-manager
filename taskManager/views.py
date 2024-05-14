@@ -1,5 +1,5 @@
-from django.shortcuts import render, redirect
 from django.views import View
+from django.shortcuts import get_object_or_404, render, redirect
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
@@ -31,11 +31,28 @@ class ListTaskView(View):
     @login_required(redirect_field_name='next', login_url="/login/")
     def get(request):           
         dao = taskDao()
-        tasks = dao.ListTask(request.user)
+        tasks = dao.listTask(request.user)
         context = {
             'tasks': tasks 
         }
         return render(request, 'taskManager/listTask.html', context)
+    
+class DeleteTaskView(View):    
+    @login_required(redirect_field_name='next', login_url="/login/") 
+    def post(request, **kwargs):                  
+        try:       
+            get_object_or_404(Task, id=kwargs['taskID'])
+            dao = taskDao()
+            if dao.deleteTask(kwargs['taskID']) == 0:
+                messages.success(request, 'Tarefa excluida com sucesso!')
+                return redirect('taskManager:listTasks') # Excluido com sucesso 
+            else:
+                messages.error(request, 'Erro ao excluir a tarefa da base de dados')
+                return redirect('taskManager:listTasks')
+                
+        except Task.DoesNotExist:
+            messages.error(request, 'Tarefa não existe na base de dados')
+            return redirect('taskManager:listTasks')
 
 class GenericView(View):
     def index(request):

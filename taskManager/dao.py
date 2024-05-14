@@ -1,4 +1,3 @@
-from django import forms
 from .models import *
 from .forms import *
     
@@ -11,9 +10,17 @@ class taskDao:
             self.save(form.cleaned_data, user)
             return task
         
-    def ListTask(self, member):      
+    def listTask(self, member):      
         return Task.objects.filter(user=member).order_by('completed', '-created_at')
-            
+    
+    def deleteTask(self, pk):
+        try:
+            obj = Task.objects.get(pk=pk)
+            obj.delete()
+            return 0
+        except Task.DoesNotExist:
+            return 1
+        
     def save(self, cleaned_data, u):
         title = cleaned_data['title']
         description = cleaned_data['description']
