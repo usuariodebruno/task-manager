@@ -9,15 +9,18 @@ from .models import *
 from .forms import *
 from .dao import *
 
-class RegisterTaskView(View):
-    def post(self, request, user):
+class RegisterTaskView(View):    
+    @login_required(redirect_field_name='next', login_url="/login/")
+    def post(request):
         if request.method == 'POST':            
             dao = taskDao()
-            task = dao.registerTask(request, user)
+            task = dao.registerTask(request, request.user)
             if task:                
-                #messages.success(request, 'Tarefa: "'+ task.title +'" registrada com sucesso!')
-                return redirect('taskManager:index')
-            
+                messages.success(request, 'Tarefa: "'+ task.title +'" registrada com sucesso!')
+                return redirect('taskManager:listTasks')
+    
+    @login_required(redirect_field_name='next', login_url="/login/")
+    def get(request):    
         form = TaskForm()
         #messages.error(request, 'Este campo é obrigatório.')
         return render(request, 'taskManager/registerTask.html', {'form': form})

@@ -12,7 +12,7 @@ class taskDao:
             return task
         
     def ListTask(self, member):      
-        return Task.objects.filter(user=member)
+        return Task.objects.filter(user=member).order_by('completed', '-created_at')
             
     def save(self, cleaned_data, u):
         title = cleaned_data['title']

@@ -1,6 +1,28 @@
 {% extends 'taskManager/base.html' %}
+
+{% load bootstrap4 %}
 {% load static %}
 
 {% block conteudo %}
-
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 style="color:black">Cadastrar Nova Tarefa</h4>
+            </div>
+            <div class="card-body">
+                <form action="{% url 'taskManager:postRegisterTask' %}" method="POST">
+                    {% csrf_token %}
+                    {% bootstrap_form form %}
+                    <hr>
+                    <div class="form-group">
+                        <button type="reset" class="btn btn-secondary">Limpar</button>
+                        <a href="{% url 'taskManager:listTasks' %}" class="btn btn-warning">Voltar</a>                        
+                        <button type="submit" class="btn btn-primary">Cadastrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

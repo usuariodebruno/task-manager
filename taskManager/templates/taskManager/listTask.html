@@ -1,19 +1,78 @@
 {% extends 'taskManager/base.html' %}
+{% load bootstrap4 %}
 {% load static %}
 
 {% block conteudo %}
 <div class="container mt-5">
-    <h2 class="mb-4">Suas Tarefas</h2>
-    <ul class="list-group">
-        {% if tasks %}
-            {% for task in tasks %}
-                <a href="#"><li class="list-group-item d-inline-block w-50">{{ task.title }}</li></a>            
-            {% endfor %}
-        {% else %}        
-            <p>Não há tarefas cadastradas</p>
-        {% endif %}
-    </ul>    
+    <h2 class="mb-2">Suas Tarefas</h2>
+    <hr>
+    {% bootstrap_messages %}
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <strong>Título</strong>
+                        </div>
+                        <div class="col-md-2">                            
+                            <strong>Criado</strong>
+                        </div>
+                        <div class="col-md-4">                                                    
+                            <strong>Estado</strong>
+                        </div>                                                                        
+                        <div class="col-md-2">                                                                            
+                            <strong>Ações</strong>  
+                        </div>
+                    </div>
+                </li>
+
+                {% if tasks %}
+                {% for task in tasks %}
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-md-4">
+                            {{ task.title }}
+                        </div>
+                        <div class="col-md-2">
+                            {{ task.created_at }}
+                        </div>
+                        <div class="col-md-4">
+                            {% if task.completed %}
+                                Completa
+                            {% else %}
+                                Pendente
+                            {% endif %}
+                        </div>                                                                        
+                        <div class="col-md-1">                                       
+                            <a href="#">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="currentColor" class="bi bi-clipboard2-x-fill" viewBox="0 0 16 16" style="color:red">
+                                <path d="M10 .5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5.5.5 0 0 1-.5.5.5.5 0 0 0-.5.5V2a.5.5 0 0 0 .5.5h5A.5.5 0 0 0 11 2v-.5a.5.5 0 0 0-.5-.5.5.5 0 0 1-.5-.5"/>
+                                <path d="M4.085 1H3.5A1.5 1.5 0 0 0 2 2.5v12A1.5 1.5 0 0 0 3.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-12A1.5 1.5 0 0 0 12.5 1h-.585q.084.236.085.5V2a1.5 1.5 0 0 1-1.5 1.5h-5A1.5 1.5 0 0 1 4 2v-.5q.001-.264.085-.5M8 8.293l1.146-1.147a.5.5 0 1 1 .708.708L8.707 9l1.147 1.146a.5.5 0 0 1-.708.708L8 9.707l-1.146 1.147a.5.5 0 0 1-.708-.708L7.293 9 6.146 7.854a.5.5 0 1 1 .708-.708z"/>
+                            </svg>
+                            </a>
+                        </div>
+                        <div class="col-md-1">
+                            <a href="#">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                            </svg>
+                            </a> 
+                        </div>
+                    </div>
+                </li>           
+                {% endfor %}
+                {% else %}        
+                    <p>Não há tarefas cadastradas</p>
+                {% endif %}
+                
+            </ul>   
+        </div>
+    </div> 
     <br/>
-    <button type="submit" class="btn btn-success">Cadastrar Nova Tarefa</button>
+    <div class="form-group">
+        <a href="{% url 'taskManager:registerTask' %}" class="btn btn-success">Cadastrar Nova Tarefa</a>
+    </div>
 </div>
 {% endblock %}
