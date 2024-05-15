@@ -12,6 +12,7 @@ urlpatterns = [
     path('updateTask/<int:taskID>', views.UpdateTaskView.updateTask, name='updateTask'),  
 
     path('', views.GenericView.index, name='index'), 
-    path('login/', views.GenericView.login, name='login'),  
+    path('login/', views.GenericView.login, name='login'),    
+    path('logout/', views.GenericView.logout, name='logout'),  
  
 ]

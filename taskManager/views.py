@@ -2,7 +2,7 @@ from django.views import View
 from django.shortcuts import get_object_or_404, render, redirect
 
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 from .models import *
@@ -95,3 +95,7 @@ class GenericView(View):
                 }
                 return render(request, 'taskManager/index.html', context)        
         return render(request, 'taskManager/index.html')
+    
+    def logout(request):
+        logout(request)
+        return redirect('taskManager:index')
