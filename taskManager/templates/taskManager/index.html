@@ -1,0 +1,33 @@
+
+{% extends 'taskManager/base.html' %}
+{% load bootstrap4 %}
+{% load static %}
+
+{% block conteudo %}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header" style="color:black">
+                    Login
+                </div>
+                <div class="card-body" style="color: black">
+                    <form action="{% url 'taskManager:login' %}" method="POST">
+                        {% csrf_token %} 
+                        <div class="form-group">
+                            <label for="username">Usúario</label>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Enter username">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Senha</label>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                        </div>
+                        <br/>
+                        <button type="submit" class="btn btn-primary">Login</button>  
+                    </form>
+                    <hr>
+                    {% bootstrap_messages %}
+                </div>
+            </div>
+{% endblock %}

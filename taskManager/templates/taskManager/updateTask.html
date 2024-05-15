@@ -1,0 +1,36 @@
+{% extends 'taskManager/base.html' %}
+
+{% load bootstrap4 %}
+{% load static %}
+
+{% block conteudo %}
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8" style="background-color:white; color: black">
+        <br>
+        <h2 class="text-center">Editar Tarefa</h2>
+        <hr />
+        <form method="post">
+          {% csrf_token %}
+          {% bootstrap_form form %}
+          <br>
+          <a href="{% url 'taskManager:listTasks' %}" class="btn btn-warning">Voltar</a>
+          <button type="submit" class="btn btn-primary btn-block">Salvar</button>
+        </form>
+
+        <hr />
+        <div class="mt-3">
+          <p>
+            <strong>Criada em:</strong> {{ task.created_at }}
+          </p>
+          <p>
+            <strong>Atualizada em:</strong> {{ task.updated_at }}
+          </p>
+          <p>
+            <strong>Membro:</strong> {{ task.member }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
