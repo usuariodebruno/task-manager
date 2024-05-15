@@ -54,6 +54,7 @@ class DeleteTaskView(View):
             messages.error(request, 'Tarefa não existe na base de dados')
             return redirect('taskManager:listTasks')
 
+@login_required(redirect_field_name='next', login_url="/login/")
 class UpdateTaskView(View):
     def updateTask(request, *arg, **kwargs):        
         task = get_object_or_404(Task, id=kwargs['taskID'])        

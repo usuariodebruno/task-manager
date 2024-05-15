@@ -46,8 +46,28 @@ class DeleteTaskViewTest(BaseTest):
         # checa o redirecionamento
         self.assertRedirects(response, reverse('taskManager:listTasks'))
         
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302) # redirecionar após a atualização
+
         # checa mensagens de sucesso na exclusão
         messages = list(response.wsgi_request._messages)
         self.assertEqual(len(messages), 1)
         self.assertEqual(str(messages[0]), 'Tarefa excluida com sucesso!')
+
+class UpdateTaskViewTestCase(BaseTest):
+    def test_update_task_view(self):
+        response = self.client.get(reverse('taskManager:updateTask', kwargs={'taskID': self.task1.id}))
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.post(reverse('taskManager:updateTask', kwargs={'taskID': self.task1.id}), {
+            'title': 'Atualiza tarefa',
+            'description': 'Atualiza descração',
+            'completed': True
+        })
+        self.assertEqual(response.status_code, 302)  # redirecionar após a atualização
+        self.assertRedirects(response, reverse('taskManager:listTasks'))
+
+        # chega se a tarefa foi atualizada corretamente na base de dados
+        updated_task = Task.objects.get(id=self.task1.id)
+        self.assertEqual(updated_task.title, 'Atualiza tarefa')
+        self.assertEqual(updated_task.description, 'Atualiza descração')
+        self.assertTrue(updated_task.completed)
