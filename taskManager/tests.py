@@ -22,19 +22,22 @@ class RegisterTaskViewTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, '/listTask/')
 
-        created_task = Task.objects.get(title=self.valid_task_data['title'], user=self.user)
+        created_task = Task.objects.get(title=self.valid_task_data['title'], member=self.member)
         self.assertEqual(created_task.description, self.valid_task_data['description'])
 
 class ListTaskViewTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user('teste_nome', 'teste@email.com', 'senha123')
+        self.member = Member.objects.create(user=self.user)
+        self.client = Client()
+        self.client.force_login(self.user)
         
     def test_get_list_tasks_view(self):
         client = Client()  # cliente de teste  
-        client.force_login(self.user)  # forçar o login
+        client.force_login(self.member.user)  # forçar o login
 
-        task1 = Task.objects.create(title='Tarefa 1', description='Descrição da Tarefa 1', user=self.user)
-        task2 = Task.objects.create(title='Tarefa 2', description='Descrição da Tarefa 2', user=self.user)
+        task1 = Task.objects.create(title='Tarefa 1', description='Descrição da Tarefa 1', member=self.member)
+        task2 = Task.objects.create(title='Tarefa 2', description='Descrição da Tarefa 2', member=self.member)
         
         response = client.get('/listTask/')
        

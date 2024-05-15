@@ -5,13 +5,15 @@ class taskDao:
     def registerTask(self, resquet, user):        
         form = TaskForm(resquet.POST)
         if form.is_valid():
-            task = form.save(commit=False)
-            task.user = user
-            self.save(form.cleaned_data, user)
+            task = form.save(commit=False)            
+            member = Member.objects.get(user=user) 
+            task.member = member
+            self.save(form.cleaned_data, member)
             return task
         
-    def listTask(self, member):      
-        return Task.objects.filter(user=member).order_by('completed', '-created_at')
+    def listTask(self, user):
+        member = Member.objects.get(user=user)      
+        return Task.objects.filter(member=member).order_by('completed', '-created_at')
     
     def deleteTask(self, pk):
         try:
@@ -21,13 +23,13 @@ class taskDao:
         except Task.DoesNotExist:
             return 1
         
-    def save(self, cleaned_data, u):
+    def save(self, cleaned_data, m):
         title = cleaned_data['title']
         description = cleaned_data['description']
 
         task = Task.objects.create(
             title=title,
             description=description,
-            user=u,
+            member=m,
         )
         return task

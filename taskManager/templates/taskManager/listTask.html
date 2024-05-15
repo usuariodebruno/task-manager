@@ -9,7 +9,8 @@
     {% bootstrap_messages %}
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <ul class="list-group">
+            <ul class="list-group"> 
+                {% if tasks %}
                 <li class="list-group-item">
                     <div class="row">
                         <div class="col-md-4">
@@ -26,8 +27,6 @@
                         </div>
                     </div>
                 </li>
-
-                {% if tasks %}
                 {% for task in tasks %}
                 <li class="list-group-item">
                     <div class="row">
@@ -64,7 +63,7 @@
                 </li>           
                 {% endfor %}
                 {% else %}        
-                    <p>Não há tarefas cadastradas</p>
+                    <p>Não há tarefas cadastradas no momento</p>
                 {% endif %}
                 
             </ul>   
