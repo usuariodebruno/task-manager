@@ -23,6 +23,18 @@ class taskDao:
         except Task.DoesNotExist:
             return 1
         
+    def getTask(self, pk):
+        return Task.objects.get(pk=pk)
+    
+    def updateTask(self, form, task):
+        if form.is_valid():                
+                task.title = form.cleaned_data['title']
+                task.description = form.cleaned_data['description']
+                task.completed = form.cleaned_data['completed']
+                task.updated_at = timezone.now()
+                task.save()
+                return task
+        
     def save(self, cleaned_data, m):
         title = cleaned_data['title']
         description = cleaned_data['description']

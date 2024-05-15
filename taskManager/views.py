@@ -54,6 +54,27 @@ class DeleteTaskView(View):
             messages.error(request, 'Tarefa não existe na base de dados')
             return redirect('taskManager:listTasks')
 
+class UpdateTaskView(View):
+    def updateTask(request, *arg, **kwargs):        
+        task = get_object_or_404(Task, id=kwargs['taskID'])        
+        dao = taskDao()
+
+        if request.method=='POST':
+            form = updateTaskForm(request.POST, instance=task) 
+            if dao.updateTask(form, task):
+                messages.success(request, 'Tarefa atualizada com sucesso')
+                return redirect('taskManager:listTasks')
+            else:
+                messages.success(request, 'Erro ao atualizar tarefa')
+                return redirect('taskManager:updateTask')            
+    
+        form = updateTaskForm(instance=task)
+        context = {
+            'task': task,
+            'form': form
+        }
+        return render(request, 'taskManager/updateTask.html', context)
+        
 class GenericView(View):
     def index(request):
         return render(request, 'taskManager/index.html')
